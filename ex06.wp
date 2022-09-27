@@ -1,0 +1,14 @@
+note over browser:
+user type something in the text field 
+and click the save button, then the 
+browser executes the event handler
+that renders notes to display and
+send the new note to server in json.
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa\n [{content:"new_note_text", date:"2022-09-27T01:31:19.028Z"}]
+
+note over server
+The server save the new note content
+to its local storage.
+end note

@@ -1,0 +1,24 @@
+note over browser:
+user write something in the text field 
+and clicking the submit button 
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note\n [{note:"new_note_title"}]
+server-->browser: Status 302, with response header [{location:"/exampleapp/notes"}]
+
+note over browser:
+The status 302 cause the broser redirect
+to /exampleapp/note
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
