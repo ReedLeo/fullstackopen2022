@@ -6,6 +6,15 @@ const Button = ({clickHandler, text}) => {
   )
 }
 
+const AnecdoteToShow = ({text, num}) => {
+  return (
+    <>
+      {text} <br/>
+      has {num} votes <br/>
+    </>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -19,6 +28,7 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [voteNums, setVote] = useState(new Array(anecdotes.length).fill(0))
+  const [mostVoted, setMostVoted] = useState(0)
   
   console.log("length of anecdotes array =", anecdotes.length)
 
@@ -33,14 +43,19 @@ const App = () => {
     const voteCopy = [...voteNums]
     voteCopy[selected] += 1
     setVote(voteCopy)
+    if (voteCopy[selected] > voteCopy[mostVoted]) {
+      setMostVoted(selected)
+    }
   }
 
   return (
     <div>
-      {anecdotes[selected]} <br/>
-      has {voteNums[selected]} votes <br/>
+      <h1>Anecdote of the day</h1>
+      <AnecdoteToShow text={anecdotes[selected]} num={voteNums[selected]} />
       <Button clickHandler={vote} text="vote" />
       <Button clickHandler={randomAnecdote} text="next anecdote" />
+      <h1>Anecdote with most votes</h1>
+      <AnecdoteToShow text={anecdotes[mostVoted]} num={voteNums[mostVoted]} />
     </div>
   )
 }
