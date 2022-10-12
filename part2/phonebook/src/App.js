@@ -1,17 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import axios from 'axios'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]) 
   const [newName, setNewName] = useState('')
   const [filteredPerson, setFilteredPerson] = useState(persons)
+
+  const hook = () => {
+    console.log('effect');
+    axios
+      .get("http://192.168.29.144:3001/persons")
+      .then(response => {
+        console.log('promise fulfilled');
+        setPersons(response.data)
+        setFilteredPerson(response.data)
+      })
+  }
+  useEffect(hook, [])
+  console.log('render ', persons.length, 'persons');
+  
 
   const isDupName = () => {
     for (let i = 0; i < persons.length; ++i) {
@@ -47,7 +58,7 @@ const App = () => {
     const pattern = event.target.value
     console.log('fillter pattern :', {pattern});
     const matchedPerson = persons.filter((p) => {
-      return p.name.search(pattern) != -1;
+      return p.name.toLowerCase().search(pattern.toLowerCase()) != -1;
     })
     console.log('matched person :', matchedPerson)
     setFilteredPerson(matchedPerson)
