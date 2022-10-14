@@ -3,12 +3,13 @@ import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personService from './services/person'
-import axios from 'axios'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newPerson, setNewPerson] = useState({})
   const [filteredPerson, setFilteredPerson] = useState(persons)
+  const [notifyMsg, setNotifyMsg] = useState({txt:'some notification message...', isErr:false})
 
   const hook = () => {
     console.log('effect');
@@ -50,7 +51,8 @@ const App = () => {
               const updatedPersons = persons.map(p => p.id === returnedData.id ? returnedData : p)
               setPersons(updatedPersons)
               setFilteredPerson(updatedPersons)
-              setNewPerson({})
+              setNotifyMsg({txt:`Updated ${newPerson.name} with number of ${newPerson.number}`, isErr:false})
+              // setNewPerson({})
             })
       }
     } else {  // there is a new one to be added.
@@ -61,7 +63,8 @@ const App = () => {
           const newPersons = persons.concat(returnedPerson)
           setPersons(newPersons)
           setFilteredPerson(newPersons)
-          setNewPerson({})
+          setNotifyMsg({txt:`Added ${newPerson.name}`, isErr:false})
+          // setNewPerson({})
         })
     }
   }
@@ -103,7 +106,16 @@ const App = () => {
           const updatedPersons = persons.filter(p => p.id !== personId)
           setPersons(updatedPersons)
           setFilteredPerson(updatedPersons)
-          setNewPerson({})
+          setNotifyMsg({txt:`Deleted ${personToDelete.name}`, isErr:false})
+          // setNewPerson({})
+        })            
+        .catch(error => {
+          console.log('Error ', error);
+          
+          setNotifyMsg({txt:`Information of ${newPerson.name} has already been removed from server`, isErr:true})
+          const correctPersons = persons.filter(p => p.name !== newPerson.name)
+          setPersons(correctPersons)
+          setFilteredPerson(correctPersons)
         })
     }
   }
@@ -111,6 +123,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={notifyMsg}/>
       <Filter filterHandler={filterPersonByName} />
       <h3>add a new</h3>
       <PersonForm submitHandler={addPerson} person={newPerson} changeHandler={changePerson} />
