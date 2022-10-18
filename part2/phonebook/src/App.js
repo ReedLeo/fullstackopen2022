@@ -81,7 +81,7 @@ const App = () => {
     const pattern = event.target.value
     console.log('fillter pattern :', {pattern});
     const matchedPerson = persons.filter((p) => {
-      return p.name.toLowerCase().search(pattern.toLowerCase()) != -1;
+      return p.name.toLowerCase().search(pattern.toLowerCase()) !== -1;
     })
     console.log('matched person :', matchedPerson)
     setFilteredPerson(matchedPerson)
